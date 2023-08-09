@@ -10,7 +10,7 @@ const CREATED = http2.constants.HTTP_STATUS_CREATED;
 
 module.exports.getMe = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => res.send(user))
+    .then((user) => res.send({ email: user.email, name: user.name }))
     .catch(next);
 };
 
@@ -20,7 +20,7 @@ module.exports.updateUser = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) throw new NotFoundError('Пользователь c указанным id не найден');
-      else res.send(user);
+      else res.send({ email: user.email, name: user.name });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

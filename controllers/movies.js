@@ -15,7 +15,11 @@ module.exports.getMovies = (req, res, next) => {
 
 module.exports.createMovie = (req, res, next) => { // !!!
   Movie.create({ owner: req.user._id, ...req.body })
-    .then((movie) => res.status(CREATED).send(movie))
+    .then((createdMovie) => {
+      Movie.findById(createdMovie._id)
+        .populate('owner')
+        .then((movie) => res.status(CREATED).send(movie));
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы невалидные данные'));
