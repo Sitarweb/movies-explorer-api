@@ -25,7 +25,7 @@ app.use(helmet());
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(requestLogger);
-app.use(routes);
+app.use('/', routes);
 app.use(errorLogger);
 app.use(errors());
 
